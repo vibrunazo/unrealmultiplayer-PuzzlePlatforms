@@ -22,6 +22,7 @@ public:
 	float Speed = 50.0f;
 
 private:
+	virtual void BeginPlay() override;
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
