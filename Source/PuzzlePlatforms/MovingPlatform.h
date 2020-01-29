@@ -18,8 +18,10 @@ class PUZZLEPLATFORMS_API AMovingPlatform : public AStaticMeshActor
 	
 public:
 	AMovingPlatform();
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
 	float Speed = 50.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement", Meta = (MakeEditWidget=true))
+	FVector TargetLocation = FVector(0.0f, 0.0f, 0.0f);
 
 private:
 	virtual void BeginPlay() override;
