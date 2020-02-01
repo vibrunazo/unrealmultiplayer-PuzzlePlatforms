@@ -27,7 +27,7 @@ void AMovingPlatform::BeginPlay()
 void AMovingPlatform::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    if (HasAuthority())
+    if (HasAuthority() && ActiveTriggers > 0)
     {
         // FVector CurLoc = GetActorLocation();
         // FVector Direction = TargetLocation - CurLoc;
@@ -55,4 +55,14 @@ void AMovingPlatform::Tick(float DeltaTime)
         // AddActorLocalOffset(FVector(Speed * DeltaTime, 0.0f, 0.0f));
     }
 
+}
+
+void AMovingPlatform::AddActiveTrigger()
+{
+    ActiveTriggers++;
+}
+
+void AMovingPlatform::RemoveActiveTrigger()
+{
+    ActiveTriggers--;
 }

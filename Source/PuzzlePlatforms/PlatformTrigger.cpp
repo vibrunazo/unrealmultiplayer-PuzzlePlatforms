@@ -2,6 +2,7 @@
 
 
 #include "PlatformTrigger.h"
+#include "MovingPlatform.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -39,9 +40,18 @@ void APlatformTrigger::Tick(float DeltaTime)
 void APlatformTrigger::OnTrigger(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)  
 {
 	UE_LOG(LogTemp, Warning, TEXT("Activated!"));  
+	for (auto &&i : PlatformsToTrigger)
+	{
+		i->AddActiveTrigger();
+	}
+	
 }
 
 void APlatformTrigger::OnUntrigger(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Untrigger!"));  
+	UE_LOG(LogTemp, Warning, TEXT("Untrigger!"));
+	for (auto &&i : PlatformsToTrigger)
+	{
+		i->RemoveActiveTrigger();
+	}
 }
