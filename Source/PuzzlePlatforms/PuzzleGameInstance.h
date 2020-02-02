@@ -15,11 +15,15 @@ class PUZZLEPLATFORMS_API UPuzzleGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+	UPuzzleGameInstance();
 	virtual void Init() override;
 
 	UFUNCTION(Exec)
 	void Host();
 	UFUNCTION(Exec)
 	void Join(const FString& Address);
+
+private:
+	class TSubclassOf<class UUserWidget> MenuClass;
 	
 };

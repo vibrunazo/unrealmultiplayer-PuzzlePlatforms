@@ -4,6 +4,23 @@
 #include "PuzzleGameInstance.h"
 #include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
+#include "UObject/ConstructorHelpers.h"
+
+#include "PlatformTrigger.h"
+#include "Blueprint/UserWidget.h"
+
+UPuzzleGameInstance::UPuzzleGameInstance()
+{
+
+    static ConstructorHelpers::FClassFinder<APlatformTrigger> PlatformTriggerBPClass(TEXT("/Game/Blueprint/BP_PlatformTrigger"));
+    if (!ensure(PlatformTriggerBPClass.Class != nullptr)) return;
+    UE_LOG(LogTemp, Warning, TEXT("Found class %s"), *PlatformTriggerBPClass.Class->GetName());
+
+    static ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/MenuSystem/WBP_Menu"));
+    if (!ensure(MenuBPClass.Class != nullptr)) return;
+    MenuClass = MenuBPClass.Class;
+    UE_LOG(LogTemp, Warning, TEXT("Found Widget class %s"), *MenuClass->GetName());
+}
 
 void UPuzzleGameInstance::Init()
 {
