@@ -15,6 +15,10 @@ void UPuzzleGameInstance::Host()
     UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
     UEngine* Engine = GetEngine();
     Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Le message on le screen"));
+
+    UWorld* World = GetWorld();
+    if (!ensure(World != nullptr)) return;
+    World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
 }
 
 void UPuzzleGameInstance::Join(const FString& Address)
