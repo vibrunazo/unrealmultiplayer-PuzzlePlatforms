@@ -28,6 +28,14 @@ void UPuzzleGameInstance::Init()
     UE_LOG(LogTemp, Warning, TEXT("logging from game instance init"));
 }
 
+void UPuzzleGameInstance::LoadMenu()
+{
+    if (!ensure(MenuClass != nullptr)) return;
+    UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+    if (!ensure(Menu != nullptr)) return;
+    Menu->AddToViewport();
+}
+
 void UPuzzleGameInstance::Host()
 {
     UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
