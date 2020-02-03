@@ -21,4 +21,9 @@ public:
 	class UButton* HostButton;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* JoinButton;
+
+private:
+	virtual bool Initialize() override;
+	UFUNCTION()
+	void OnHostClick();
 };

@@ -2,15 +2,24 @@
 
 
 #include "MainMenu.h"
-// #include "Blueprint/UserWidget.h"
-
-// UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
-// {
-//     UE_LOG(LogTemp, Warning, TEXT("Hello from main menu"));
-// }
+#include "Components/Button.h"
 
   void UMainMenu::NativeConstruct()
   {
     Super::NativeConstruct();
-    UE_LOG(LogTemp, Warning, TEXT("Hello from main menu"));
+  }
+
+  bool UMainMenu::Initialize()
+  {
+    bool Success = Super::Initialize();
+    if (!Success) return false;
+    if (!ensure(HostButton != nullptr)) return false;
+    HostButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostClick);
+
+    return true;
+  }
+
+  void UMainMenu::OnHostClick()
+  {
+      UE_LOG(LogTemp, Warning, TEXT("Host Button clicked"));
   }
