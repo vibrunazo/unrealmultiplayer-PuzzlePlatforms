@@ -32,7 +32,7 @@ void UPuzzleGameInstance::Init()
 void UPuzzleGameInstance::LoadMenu()
 {
     if (!ensure(MenuClass != nullptr)) return;
-    UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
     if (!ensure(Menu != nullptr)) return;
     Menu->AddToViewport();
     Menu->bIsFocusable = true;
@@ -42,9 +42,7 @@ void UPuzzleGameInstance::LoadMenu()
     PlayerController->SetInputMode(FInputModeUIOnly());
     PlayerController->bShowMouseCursor = true;
 
-    UMainMenu* MainMenu = Cast<UMainMenu>(Menu);
-    if (!ensure(MainMenu != nullptr)) return;
-    MainMenu->SetMenuInterface(this);
+    Menu->SetMenuInterface(this);
 }
 
 void UPuzzleGameInstance::Host()
