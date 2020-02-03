@@ -21,7 +21,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* JoinButton;
 	void SetMenuInterface(IMenuInterface* DudeWhoImplemented);
-
+	void Setup();
+	void Teardown();
 private:
 	virtual bool Initialize() override;
 	UFUNCTION()

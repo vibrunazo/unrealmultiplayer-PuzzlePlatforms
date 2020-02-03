@@ -3,6 +3,7 @@
 
 #include "MainMenu.h"
 #include "Components/Button.h"
+#include "Engine/World.h"
 
   bool UMainMenu::Initialize()
   {
@@ -14,6 +15,26 @@
     JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinClick);
 
     return true;
+  }
+
+  void UMainMenu::Setup()
+  {
+    this->AddToViewport();
+    this->bIsFocusable = true;
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+    if (!ensure(PlayerController != nullptr)) return;
+    this->SetUserFocus(PlayerController);
+    PlayerController->SetInputMode(FInputModeUIOnly());
+    PlayerController->bShowMouseCursor = true;
+  }
+
+  void UMainMenu::Teardown()
+  {
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+    if (!ensure(PlayerController != nullptr)) return;
+    PlayerController->SetInputMode(FInputModeGameOnly());
+    PlayerController->bShowMouseCursor = false;
+    this->RemoveFromViewport();
   }
 
   void UMainMenu::OnHostClick()

@@ -32,28 +32,20 @@ void UPuzzleGameInstance::Init()
 void UPuzzleGameInstance::LoadMenu()
 {
     if (!ensure(MenuClass != nullptr)) return;
-    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
+    Menu = CreateWidget<UMainMenu>(this, MenuClass);
     if (!ensure(Menu != nullptr)) return;
-    Menu->AddToViewport();
-    Menu->bIsFocusable = true;
-    APlayerController* PlayerController = GetFirstLocalPlayerController();
-    if (!ensure(PlayerController != nullptr)) return;
-    Menu->SetUserFocus(PlayerController);
-    PlayerController->SetInputMode(FInputModeUIOnly());
-    PlayerController->bShowMouseCursor = true;
+    Menu->Setup();
 
     Menu->SetMenuInterface(this);
 }
 
 void UPuzzleGameInstance::Host()
 {
-    UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
-    UEngine* Engine = GetEngine();
-    Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Le message on le screen"));
+    // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
+    // UEngine* Engine = GetEngine();
+    // Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Le message on le screen"));
 
-    APlayerController* PlayerController = GetFirstLocalPlayerController();
-    if (!ensure(PlayerController != nullptr)) return;
-    PlayerController->SetInputMode(FInputModeGameOnly());
+    Menu->Teardown();
 
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;
@@ -66,7 +58,7 @@ void UPuzzleGameInstance::Join()
 }
 void UPuzzleGameInstance::Join(const FString& Address)
 {
-    UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
+    // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
     UEngine* Engine = GetEngine();
     Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Joining: %s"), *Address));
 
