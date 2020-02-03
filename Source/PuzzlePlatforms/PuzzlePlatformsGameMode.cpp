@@ -12,4 +12,5 @@ APuzzlePlatformsGameMode::APuzzlePlatformsGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+	// bUseSeamlessTravel = true;
 }

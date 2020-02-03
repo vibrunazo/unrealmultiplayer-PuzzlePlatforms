@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "MenuSystem/MenuInterface.h"
 #include "PuzzleGameInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PUZZLEPLATFORMS_API UPuzzleGameInstance : public UGameInstance
+class PUZZLEPLATFORMS_API UPuzzleGameInstance : public UGameInstance, public IMenuInterface
 {
 	GENERATED_BODY()
 
@@ -22,6 +23,7 @@ public:
 	void LoadMenu();
 	UFUNCTION(Exec)
 	void Host();
+	void Join();
 	UFUNCTION(Exec)
 	void Join(const FString& Address);
 
