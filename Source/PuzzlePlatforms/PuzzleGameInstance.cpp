@@ -56,6 +56,7 @@ void UPuzzleGameInstance::Join()
 {
     Join("192.168.15.11");
 }
+
 void UPuzzleGameInstance::Join(const FString& Address)
 {
     // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
