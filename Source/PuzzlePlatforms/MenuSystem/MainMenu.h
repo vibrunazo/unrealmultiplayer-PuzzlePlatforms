@@ -3,15 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "MenuInterface.h"
+#include "MenuWidget.h"
 #include "MainMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PUZZLEPLATFORMS_API UMainMenu : public UUserWidget
+class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 {
 	GENERATED_BODY()
 
@@ -32,9 +31,7 @@ public:
 	class UButton* JoinConfirmButton;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* JoinCancelButton;
-	void SetMenuInterface(IMenuInterface* DudeWhoImplemented);
-	void Setup();
-	void Teardown();
+	
 private:
 	virtual bool Initialize() override;
 	UFUNCTION()
@@ -45,7 +42,5 @@ private:
 	void OnJoinConfirmClick();
 	UFUNCTION()
 	void OnJoinCancelClick();
-
-	IMenuInterface* MenuInterface;
 
 };

@@ -3,6 +3,7 @@
 #include "PuzzlePlatformsGameMode.h"
 #include "PuzzlePlatformsCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "PuzzleController.h"
 
 APuzzlePlatformsGameMode::APuzzlePlatformsGameMode()
 {
@@ -12,5 +13,11 @@ APuzzlePlatformsGameMode::APuzzlePlatformsGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+	// static ConstructorHelpers::FClassFinder<APuzzleController> ControllerClass(TEXT("Class'/Script/PuzzlePlatforms.PuzzleController'"));
+	// if (ControllerClass.Class != NULL)
+	// {
+	// 	PlayerControllerClass = ControllerClass.Class;
+	// }
+	PlayerControllerClass = APuzzleController::StaticClass();
 	// bUseSeamlessTravel = true;
 }

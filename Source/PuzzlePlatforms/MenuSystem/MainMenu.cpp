@@ -23,26 +23,6 @@
     return true;
   }
 
-  void UMainMenu::Setup()
-  {
-    this->AddToViewport();
-    this->bIsFocusable = true;
-    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-    if (!ensure(PlayerController != nullptr)) return;
-    this->SetUserFocus(PlayerController);
-    PlayerController->SetInputMode(FInputModeUIOnly());
-    PlayerController->bShowMouseCursor = true;
-  }
-
-  void UMainMenu::Teardown()
-  {
-    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-    if (!ensure(PlayerController != nullptr)) return;
-    PlayerController->SetInputMode(FInputModeGameOnly());
-    PlayerController->bShowMouseCursor = false;
-    this->RemoveFromViewport();
-  }
-
   void UMainMenu::OnHostClick()
   {
     UE_LOG(LogTemp, Warning, TEXT("Host Button clicked"));
@@ -72,9 +52,4 @@
       UE_LOG(LogTemp, Warning, TEXT("Join Cancel Button clicked"));
       if (!ensure(MenuSwitcher != nullptr)) return;
       MenuSwitcher->SetActiveWidget(MenuWindow);
-  }
-
-  void UMainMenu::SetMenuInterface(IMenuInterface* DudeWhoImplemented)
-  {
-    MenuInterface = DudeWhoImplemented;
   }

@@ -7,6 +7,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "PlatformTrigger.h"
 #include "MenuSystem/MainMenu.h"
+#include "MenuSystem/MenuWidget.h"
 #include "Blueprint/UserWidget.h"
 
 UPuzzleGameInstance::UPuzzleGameInstance()
@@ -19,7 +20,10 @@ UPuzzleGameInstance::UPuzzleGameInstance()
     static ConstructorHelpers::FClassFinder<UUserWidget> MenuBPClass(TEXT("/Game/MenuSystem/WBP_Menu"));
     if (!ensure(MenuBPClass.Class != nullptr)) return;
     MenuClass = MenuBPClass.Class;
-    // UE_LOG(LogTemp, Warning, TEXT("Found Widget class %s"), *MenuClass->GetName());
+    static ConstructorHelpers::FClassFinder<UUserWidget> IGMenuBPClass(TEXT("/Game/MenuSystem/WBP_IngameMenu"));
+    if (!ensure(IGMenuBPClass.Class != nullptr)) return;
+    InGameMenuClass = IGMenuBPClass.Class;
+    // UE_LOG(LogTemp, Warning, TEXT("Found Widget class %s"), *InGameMenuClass->GetName());
 }
 
 void UPuzzleGameInstance::Init()
@@ -39,13 +43,26 @@ void UPuzzleGameInstance::LoadMenu()
     Menu->SetMenuInterface(this);
 }
 
+// Called by PuzzleController when player inputs Menu action
+void UPuzzleGameInstance::LoadInGameMenu()
+{
+    if (!ensure(InGameMenuClass != nullptr)) return;
+    InGameMenu = CreateWidget<UMenuWidget>(this, InGameMenuClass);
+    if (!ensure(InGameMenu != nullptr)) return;
+    InGameMenu->Setup();
+
+    // InGameMenu->SetMenuInterface(this);
+}
+
 void UPuzzleGameInstance::Host()
 {
     // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
     // UEngine* Engine = GetEngine();
     // Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Le message on le screen"));
-
-    Menu->Teardown();
+    if (Menu)
+    {
+        Menu->Teardown();
+    }
 
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;

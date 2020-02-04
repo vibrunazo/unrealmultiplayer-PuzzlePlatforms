@@ -13,6 +13,7 @@ class APuzzlePlatformsGameMode : public AGameModeBase
 
 public:
 	APuzzlePlatformsGameMode();
+	
 };
 
 
