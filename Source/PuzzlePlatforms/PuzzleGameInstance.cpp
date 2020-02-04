@@ -51,7 +51,7 @@ void UPuzzleGameInstance::LoadInGameMenu()
     if (!ensure(InGameMenu != nullptr)) return;
     InGameMenu->Setup();
 
-    // InGameMenu->SetMenuInterface(this);
+    InGameMenu->SetMenuInterface(this);
 }
 
 void UPuzzleGameInstance::Host()
@@ -86,4 +86,16 @@ void UPuzzleGameInstance::Join(const FString& Address)
     Menu->Teardown();
 
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzleGameInstance::GoToMainMenu()
+{
+    // UWorld* World = GetWorld();
+    // if (!ensure(World != nullptr)) return;
+    // World->ServerTravel("/Game/MenuSystem/MainMenu");
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (!ensure(PlayerController != nullptr)) return;
+    if (InGameMenu) InGameMenu->Teardown();
+
+    PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }

@@ -20,14 +20,17 @@ public:
 	virtual void Init() override;
 
 	UFUNCTION(Exec, BlueprintCallable)
+	void GoToMainMenu() override;
+	UFUNCTION(Exec, BlueprintCallable)
 	void LoadMenu();
 	UFUNCTION(Exec, BlueprintCallable)
 	void LoadInGameMenu();
 	UFUNCTION(Exec)
-	void Host();
-	void Join();
+	void Host() override;
+	void Join() override;
 	UFUNCTION(Exec)
-	void Join(const FString& Address);
+	void Join(const FString& Address) override;
+
 
 private:
 	class TSubclassOf<class UUserWidget> MenuClass;
@@ -35,5 +38,4 @@ private:
 
 	class UMainMenu* Menu;
 	class UMenuWidget* InGameMenu;
-	
 };
