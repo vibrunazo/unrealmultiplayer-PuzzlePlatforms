@@ -19,6 +19,8 @@
     JoinConfirmButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinConfirmClick);
     if (!ensure(JoinCancelButton != nullptr)) return false;
     JoinCancelButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinCancelClick);
+    if (!ensure(QuitButton != nullptr)) return false;
+    QuitButton->OnClicked.AddDynamic(this, &UMainMenu::OnQuitClick);
 
     return true;
   }
@@ -52,4 +54,13 @@
       UE_LOG(LogTemp, Warning, TEXT("Join Cancel Button clicked"));
       if (!ensure(MenuSwitcher != nullptr)) return;
       MenuSwitcher->SetActiveWidget(MenuWindow);
+  }
+
+  void UMainMenu::OnQuitClick()
+  {
+    UWorld* World = GetWorld();
+    if (!ensure(World != nullptr)) return;
+    APlayerController* Cont = World->GetFirstPlayerController();
+    if (!ensure(Cont != nullptr)) return;
+    Cont->ConsoleCommand("Quit");
   }

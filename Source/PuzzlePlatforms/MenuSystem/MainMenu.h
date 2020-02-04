@@ -31,6 +31,8 @@ public:
 	class UButton* JoinConfirmButton;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* JoinCancelButton;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* QuitButton;
 	
 private:
 	virtual bool Initialize() override;
@@ -42,5 +44,7 @@ private:
 	void OnJoinConfirmClick();
 	UFUNCTION()
 	void OnJoinCancelClick();
+	UFUNCTION()
+	void OnQuitClick();
 
 };
