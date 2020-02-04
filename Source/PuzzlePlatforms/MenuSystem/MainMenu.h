@@ -17,9 +17,21 @@ class PUZZLEPLATFORMS_API UMainMenu : public UUserWidget
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UEditableTextBox* IPTextbox;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidget* MenuWindow;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidget* JoinWindow;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidgetSwitcher* MenuSwitcher;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* HostButton;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* JoinButton;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* JoinConfirmButton;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* JoinCancelButton;
 	void SetMenuInterface(IMenuInterface* DudeWhoImplemented);
 	void Setup();
 	void Teardown();
@@ -29,6 +41,10 @@ private:
 	void OnHostClick();
 	UFUNCTION()
 	void OnJoinClick();
+	UFUNCTION()
+	void OnJoinConfirmClick();
+	UFUNCTION()
+	void OnJoinCancelClick();
 
 	IMenuInterface* MenuInterface;
 
