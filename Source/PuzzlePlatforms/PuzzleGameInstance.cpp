@@ -60,12 +60,13 @@ void UPuzzleGameInstance::Join()
 void UPuzzleGameInstance::Join(const FString& Address)
 {
     // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
+    if (!ensure(*Address != nullptr)) return;
     UEngine* Engine = GetEngine();
     Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Joining: %s"), *Address));
 
     APlayerController* PlayerController = GetFirstLocalPlayerController();
     if (!ensure(PlayerController != nullptr)) return;
-    PlayerController->SetInputMode(FInputModeGameOnly());
+    Menu->Teardown();
 
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
