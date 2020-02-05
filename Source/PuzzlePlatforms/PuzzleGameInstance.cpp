@@ -32,7 +32,11 @@ void UPuzzleGameInstance::Init()
     Super::Init();
     // UE_LOG(LogTemp, Warning, TEXT("logging from game instance init"));
     IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
-    UE_LOG(LogTemp, Warning, TEXT("OSS: %s"), *OSS->GetInstanceName().ToString());
+    if (!ensure(OSS != nullptr)) return;
+    UE_LOG(LogTemp, Warning, TEXT("OSS: %s Platform: %s"), *OSS->GetInstanceName().ToString(), *OSS->GetOnlineServiceName().ToString());
+    IOnlineSessionPtr SessionInterface = OSS->GetSessionInterface();
+    if (!ensure(SessionInterface != nullptr)) return;
+    UE_LOG(LogTemp, Warning, TEXT("Found Session Interface"));
 }
 
 // Called by Level BluePrint on MainMenu level
