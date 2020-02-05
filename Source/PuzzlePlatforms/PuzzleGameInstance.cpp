@@ -9,6 +9,7 @@
 #include "MenuSystem/MainMenu.h"
 #include "MenuSystem/MenuWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "OnlineSubsystem.h"
 
 UPuzzleGameInstance::UPuzzleGameInstance()
 {
@@ -30,6 +31,8 @@ void UPuzzleGameInstance::Init()
 {
     Super::Init();
     // UE_LOG(LogTemp, Warning, TEXT("logging from game instance init"));
+    IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
+    UE_LOG(LogTemp, Warning, TEXT("OSS: %s"), *OSS->GetInstanceName().ToString());
 }
 
 // Called by Level BluePrint on MainMenu level
