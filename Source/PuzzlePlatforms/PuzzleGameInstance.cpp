@@ -9,7 +9,9 @@
 #include "MenuSystem/MainMenu.h"
 #include "MenuSystem/MenuWidget.h"
 #include "Blueprint/UserWidget.h"
-#include "OnlineSubsystem.h"
+// #include "OnlineSubsystem.h"
+// #include "OnlineSessionSettings.h"
+// #include "Interfaces/OnlineSessionInterface.h"
 
 UPuzzleGameInstance::UPuzzleGameInstance()
 {
@@ -34,9 +36,11 @@ void UPuzzleGameInstance::Init()
     IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
     if (!ensure(OSS != nullptr)) return;
     UE_LOG(LogTemp, Warning, TEXT("OSS: %s Platform: %s"), *OSS->GetInstanceName().ToString(), *OSS->GetOnlineServiceName().ToString());
-    IOnlineSessionPtr SessionInterface = OSS->GetSessionInterface();
-    if (!ensure(SessionInterface != nullptr)) return;
+    SessionInterface = OSS->GetSessionInterface();
+    if (!ensure(SessionInterface.IsValid())) return;
     UE_LOG(LogTemp, Warning, TEXT("Found Session Interface"));
+    // SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+    SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnCreateSessionComplete);
 }
 
 // Called by Level BluePrint on MainMenu level
@@ -63,17 +67,23 @@ void UPuzzleGameInstance::LoadInGameMenu()
 
 void UPuzzleGameInstance::Host()
 {
+    if (SessionInterface.IsValid())
+    {
+        FOnlineSessionSettings SessionSettings;
+        SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+
+    }
     // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
     // UEngine* Engine = GetEngine();
     // Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Le message on le screen"));
-    if (Menu)
-    {
-        Menu->Teardown();
-    }
+    // if (Menu)
+    // {
+    //     Menu->Teardown();
+    // }
 
-    UWorld* World = GetWorld();
-    if (!ensure(World != nullptr)) return;
-    World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
+    // UWorld* World = GetWorld();
+    // if (!ensure(World != nullptr)) return;
+    // World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
 }
 
 void UPuzzleGameInstance::Join()
@@ -105,4 +115,18 @@ void UPuzzleGameInstance::GoToMainMenu()
     if (InGameMenu) InGameMenu->Teardown();
 
     PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzleGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
+{
+    if (!Success) return;
+    UE_LOG(LogTemp, Warning, TEXT("Session Created: %s"), *SessionName.ToString());
+    if (Menu)
+    {
+        Menu->Teardown();
+    }
+
+    UWorld* World = GetWorld();
+    if (!ensure(World != nullptr)) return;
+    World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
 }
