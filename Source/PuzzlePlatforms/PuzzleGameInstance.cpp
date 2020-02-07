@@ -13,6 +13,8 @@
 // #include "OnlineSessionSettings.h"
 // #include "Interfaces/OnlineSessionInterface.h"
 
+const static FName SESSION_NAME = TEXT("My Session Game");
+
 UPuzzleGameInstance::UPuzzleGameInstance()
 {
 
@@ -41,6 +43,7 @@ void UPuzzleGameInstance::Init()
     UE_LOG(LogTemp, Warning, TEXT("Found Session Interface"));
     // SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
     SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnCreateSessionComplete);
+    SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnDestroySessionComplete);
 }
 
 // Called by Level BluePrint on MainMenu level
@@ -69,8 +72,18 @@ void UPuzzleGameInstance::Host()
 {
     if (SessionInterface.IsValid())
     {
-        FOnlineSessionSettings SessionSettings;
-        SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+        auto ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
+        if (ExistingSession != nullptr)
+        {
+            bNeedsNewSession = true;
+            SessionInterface->DestroySession(SESSION_NAME);
+        }
+        else
+        {
+            CreateSession();
+            // FOnlineSessionSettings SessionSettings;
+            // SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+        }
 
     }
     // UE_LOG(LogTemp, Warning, TEXT("logging from host function"));
@@ -129,4 +142,17 @@ void UPuzzleGameInstance::OnCreateSessionComplete(FName SessionName, bool Succes
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;
     World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
+}
+
+void UPuzzleGameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+{
+    if (!bWasSuccessful || !SessionInterface.IsValid() || !bNeedsNewSession) return;
+    CreateSession();
+    bNeedsNewSession = false;
+}
+
+void UPuzzleGameInstance::CreateSession()
+{
+    FOnlineSessionSettings SessionSettings;
+    SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }

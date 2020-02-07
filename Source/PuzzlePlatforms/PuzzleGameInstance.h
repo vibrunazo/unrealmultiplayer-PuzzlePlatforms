@@ -21,6 +21,7 @@ class PUZZLEPLATFORMS_API UPuzzleGameInstance : public UGameInstance, public IMe
 public:
 	UPuzzleGameInstance();
 	virtual void Init() override;
+	void CreateSession();
 
 	UFUNCTION(Exec, BlueprintCallable)
 	void GoToMainMenu() override;
@@ -37,6 +38,7 @@ public:
 
 private:
 	void OnCreateSessionComplete(FName, bool);
+	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 
 	class TSubclassOf<class UUserWidget> MenuClass;
 	class TSubclassOf<class UUserWidget> InGameMenuClass;
@@ -44,4 +46,6 @@ private:
 	class UMainMenu* Menu;
 	class UMenuWidget* InGameMenu;
 	IOnlineSessionPtr SessionInterface;
+	// whether we need a new session to be created after one is destroyed
+	bool bNeedsNewSession = false;
 };
