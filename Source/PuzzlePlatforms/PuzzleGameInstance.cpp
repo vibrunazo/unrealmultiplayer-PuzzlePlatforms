@@ -44,6 +44,10 @@ void UPuzzleGameInstance::Init()
     // SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
     SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnCreateSessionComplete);
     SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnDestroySessionComplete);
+    SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnFindSessionsComplete);
+    SessionSearch = MakeShareable(new FOnlineSessionSearch());
+    if (!SessionSearch.IsValid()) return;
+    SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
 // Called by Level BluePrint on MainMenu level
@@ -155,4 +159,12 @@ void UPuzzleGameInstance::CreateSession()
 {
     FOnlineSessionSettings SessionSettings;
     SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+}
+
+void UPuzzleGameInstance::OnFindSessionsComplete(bool bSuccess)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Find Sessions Complete"));
+    if (!ensure(SessionInterface != nullptr && bSuccess)) return;
+    auto Num = SessionInterface->GetNumSessions();
+    UE_LOG(LogTemp, Warning, TEXT("Total of %d sessions"), Num);
 }

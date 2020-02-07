@@ -39,6 +39,7 @@ public:
 private:
 	void OnCreateSessionComplete(FName, bool);
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnFindSessionsComplete(bool);
 
 	class TSubclassOf<class UUserWidget> MenuClass;
 	class TSubclassOf<class UUserWidget> InGameMenuClass;
@@ -46,6 +47,7 @@ private:
 	class UMainMenu* Menu;
 	class UMenuWidget* InGameMenu;
 	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	// whether we need a new session to be created after one is destroyed
 	bool bNeedsNewSession = false;
 };
