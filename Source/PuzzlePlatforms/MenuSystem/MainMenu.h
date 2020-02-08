@@ -15,8 +15,11 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 	GENERATED_BODY()
 
 public:
+	UMainMenu(const FObjectInitializer &ObjectInitializer);
+	// UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	// class UEditableTextBox* IPTextbox;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UEditableTextBox* IPTextbox;
+	class UScrollBox* ServerList;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UWidget* MenuWindow;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -46,5 +49,7 @@ private:
 	void OnJoinCancelClick();
 	UFUNCTION()
 	void OnQuitClick();
+
+	TSubclassOf<class UUserWidget> RowClass;
 
 };
