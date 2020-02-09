@@ -46,9 +46,6 @@ void UPuzzleGameInstance::Init()
     SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnDestroySessionComplete);
     SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzleGameInstance::OnFindSessionsComplete);
     SessionSearch = MakeShareable(new FOnlineSessionSearch());
-    if (!SessionSearch.IsValid()) return;
-    SessionSearch->bIsLanQuery = true;
-    SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
 // Called by Level BluePrint on MainMenu level
@@ -118,9 +115,11 @@ void UPuzzleGameInstance::Join(const FString& Address)
 
     APlayerController* PlayerController = GetFirstLocalPlayerController();
     if (!ensure(PlayerController != nullptr)) return;
-    Menu->Teardown();
+    Menu->SetServerList({"One Server", "Another Server"});
+    // Menu->Teardown();
 
-    PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+
+    // PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
 
 void UPuzzleGameInstance::GoToMainMenu()
@@ -169,14 +168,24 @@ void UPuzzleGameInstance::CreateSession()
 void UPuzzleGameInstance::OnFindSessionsComplete(bool bSuccess)
 {
     UE_LOG(LogTemp, Warning, TEXT("Find Sessions Complete"));
-    if (!ensure(SessionInterface.IsValid() && bSuccess)) return;
+    if (!ensure(SessionInterface.IsValid() && bSuccess && Menu != nullptr)) return;
     TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
     UE_LOG(LogTemp, Warning, TEXT("Total of %d sessions"), Results.Num());
+    TArray<FString> ServerNames;
     for (auto &&Result : Results)
     {
         FString SessId = Result.GetSessionIdStr();
         int32 SessPing = Result.PingInMs;
         UE_LOG(LogTemp, Warning, TEXT("Session: %s, ping: %d"), *SessId, SessPing);
+        ServerNames.Add(SessId);
     }
-    
+    Menu->SetServerList(ServerNames);
+}
+
+void UPuzzleGameInstance::MenuNeedsSessions()
+{
+    if (!SessionSearch.IsValid()) return;
+    SessionSearch->bIsLanQuery = true;
+    SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+    UE_LOG(LogTemp, Warning, TEXT("Started looking for sessions"));
 }

@@ -15,5 +15,6 @@ class PUZZLEPLATFORMS_API URowWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* ServerName;
 };

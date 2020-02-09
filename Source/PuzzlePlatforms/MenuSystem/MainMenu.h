@@ -16,6 +16,8 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 
 public:
 	UMainMenu(const FObjectInitializer &ObjectInitializer);
+	void SetServerList(TArray<FString> ServerNames);
+
 	// UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	// class UEditableTextBox* IPTextbox;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

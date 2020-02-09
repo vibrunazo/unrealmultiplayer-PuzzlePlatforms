@@ -34,6 +34,7 @@ public:
 	void Join() override;
 	UFUNCTION(Exec)
 	void Join(const FString& Address) override;
+	void MenuNeedsSessions() override;
 
 
 private:

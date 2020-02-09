@@ -26,4 +26,5 @@ public:
 	virtual void Join() = 0;
 	virtual void GoToMainMenu() = 0;
 	virtual void Join(const FString& Address) = 0;
+	virtual void MenuNeedsSessions() = 0;
 };

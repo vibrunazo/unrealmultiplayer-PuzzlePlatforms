@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/ScrollBox.h"
+#include "Components/TextBlock.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer &ObjectInitializer)
 {
@@ -41,6 +42,20 @@ bool UMainMenu::Initialize()
   return true;
 }
 
+void UMainMenu::SetServerList(TArray<FString> ServerNames)
+{
+  if (!ensure(ServerList != nullptr)) return;
+  ServerList->ClearChildren();
+  for (auto &&CurName : ServerNames)
+  {
+    if (!ensure(RowClass != nullptr))
+      return;
+    URowWidget *Row = CreateWidget<URowWidget>(this, RowClass);
+    Row->ServerName->SetText(FText::FromString(CurName));
+    ServerList->AddChild(Row);
+  }
+}
+
 void UMainMenu::OnHostClick()
 {
   UE_LOG(LogTemp, Warning, TEXT("Host Button clicked"));
@@ -56,20 +71,18 @@ void UMainMenu::OnJoinClick()
   if (!ensure(MenuSwitcher != nullptr))
     return;
   MenuSwitcher->SetActiveWidget(JoinWindow);
+  MenuInterface->MenuNeedsSessions();
 }
 
 void UMainMenu::OnJoinConfirmClick()
 {
-  if (!ensure(RowClass != nullptr))
-    return;
-  URowWidget *Row = CreateWidget<URowWidget>(this, RowClass);
-  ServerList->AddChild(Row);
-  UE_LOG(LogTemp, Warning, TEXT("Row name: %s"), *Row->GetFullName());
+  
+  // UE_LOG(LogTemp, Warning, TEXT("Row name: %s"), *Row->GetFullName());
   // FText IPText = IPTextbox->GetText();
   // UE_LOG(LogTemp, Warning, TEXT("Join Confirm clicked with IP: %s"), *IPText.ToString());
-  // if (!ensure(MenuInterface != nullptr)) return;
+  if (!ensure(MenuInterface != nullptr)) return;
   // MenuInterface->Join(*IPText.ToString());
-  // MenuInterface->Join();
+  MenuInterface->Join();
 }
 
 void UMainMenu::OnJoinCancelClick()
