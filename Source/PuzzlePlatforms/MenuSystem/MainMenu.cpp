@@ -93,13 +93,14 @@ void UMainMenu::OnJoinConfirmClick()
   if (SelectedIndex.IsSet())
   {
     UE_LOG(LogTemp, Warning, TEXT("Selected Index: %d"), SelectedIndex.GetValue());
+    MenuInterface->Join(SelectedIndex.GetValue());
   }
   else
   {
     UE_LOG(LogTemp, Warning, TEXT("Index not set"));
   }
   
-  MenuInterface->Join();
+  
 }
 
 void UMainMenu::OnJoinCancelClick()

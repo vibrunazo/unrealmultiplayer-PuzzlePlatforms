@@ -31,9 +31,11 @@ public:
 	void LoadInGameMenu();
 	UFUNCTION(Exec)
 	void Host() override;
-	void Join() override;
+	// void Join() override;
+	// UFUNCTION(Exec)
+	// void Join(const FString& Address) override;
 	UFUNCTION(Exec)
-	void Join(const FString& Address) override;
+	void Join(uint32 Index) override;
 	void MenuNeedsSessions() override;
 
 
@@ -41,6 +43,7 @@ private:
 	void OnCreateSessionComplete(FName, bool);
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnFindSessionsComplete(bool);
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
 	class TSubclassOf<class UUserWidget> MenuClass;
 	class TSubclassOf<class UUserWidget> InGameMenuClass;
