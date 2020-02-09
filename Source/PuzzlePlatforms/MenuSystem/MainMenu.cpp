@@ -46,14 +46,22 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
 {
   if (!ensure(ServerList != nullptr)) return;
   ServerList->ClearChildren();
+  uint32 i = 0;
   for (auto &&CurName : ServerNames)
   {
     if (!ensure(RowClass != nullptr))
       return;
     URowWidget *Row = CreateWidget<URowWidget>(this, RowClass);
     Row->ServerName->SetText(FText::FromString(CurName));
+    Row->Setup(this, i++);
     ServerList->AddChild(Row);
   }
+}
+
+void UMainMenu::SelectIndex(uint32 NewIndex)
+{
+  SelectedIndex = NewIndex;
+  UE_LOG(LogTemp, Warning, TEXT("Selected index is now: %d"), SelectedIndex.GetValue());
 }
 
 void UMainMenu::OnHostClick()
@@ -82,6 +90,15 @@ void UMainMenu::OnJoinConfirmClick()
   // UE_LOG(LogTemp, Warning, TEXT("Join Confirm clicked with IP: %s"), *IPText.ToString());
   if (!ensure(MenuInterface != nullptr)) return;
   // MenuInterface->Join(*IPText.ToString());
+  if (SelectedIndex.IsSet())
+  {
+    UE_LOG(LogTemp, Warning, TEXT("Selected Index: %d"), SelectedIndex.GetValue());
+  }
+  else
+  {
+    UE_LOG(LogTemp, Warning, TEXT("Index not set"));
+  }
+  
   MenuInterface->Join();
 }
 
