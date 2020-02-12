@@ -22,6 +22,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* ServerName;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* PlayersText;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* RowButton;
 	UPROPERTY(BlueprintReadWrite)
 	class UMainMenu* MyParent = nullptr;

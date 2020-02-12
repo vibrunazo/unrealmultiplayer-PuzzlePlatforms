@@ -169,8 +169,9 @@ void UPuzzleGameInstance::CreateSession()
 {
     if (!ensure(SessionInterface.IsValid())) return;
     FOnlineSessionSettings SessionSettings;
-    SessionSettings.bIsLANMatch = false;
-    SessionSettings.NumPublicConnections = 2;
+    if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL") SessionSettings.bIsLANMatch = true;
+    else SessionSettings.bIsLANMatch = false;
+    SessionSettings.NumPublicConnections = 4;
     SessionSettings.bShouldAdvertise = true;
     SessionSettings.bUsesPresence = true;
     SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
@@ -182,15 +183,21 @@ void UPuzzleGameInstance::OnFindSessionsComplete(bool bSuccess)
     if (!ensure(SessionInterface.IsValid() && bSuccess && Menu != nullptr)) return;
     TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
     UE_LOG(LogTemp, Warning, TEXT("Total of %d sessions"), Results.Num());
-    TArray<FString> ServerNames;
+    TArray<FServerData> ServerData;
     for (auto &&Result : Results)
     {
         FString SessId = Result.GetSessionIdStr();
         int32 SessPing = Result.PingInMs;
         UE_LOG(LogTemp, Warning, TEXT("Session: %s, ping: %d"), *SessId, SessPing);
-        ServerNames.Add(SessId);
+        FServerData Data;
+        Data.Name = SessId;
+        Data.HostUsername = Result.Session.OwningUserName;
+        Data.Ping = SessPing;
+        Data.MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
+        Data.CurrentPlayers = Result.Session.NumOpenPublicConnections;
+        ServerData.Add(Data);
     }
-    Menu->SetServerList(ServerNames);
+    Menu->SetServerList(ServerData);
 }
 
 void UPuzzleGameInstance::MenuNeedsSessions()

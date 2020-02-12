@@ -45,20 +45,23 @@ bool UMainMenu::Initialize()
   return true;
 }
 
-void UMainMenu::SetServerList(TArray<FString> ServerNames)
+void UMainMenu::SetServerList(TArray<FServerData> Servers)
 {
   if (!ensure(ServerList != nullptr)) return;
   ServerList->ClearChildren();
   int32 i = 0;
-  ServerNames.Add("test1");
-  ServerNames.Add("test2");
-  ServerNames.Add("test3");
-  for (auto &&CurName : ServerNames)
+  // ServerNames.Add("test1");
+  // ServerNames.Add("test2");
+  // ServerNames.Add("test3");
+  for (auto &&Server : Servers)
   {
     if (!ensure(RowClass != nullptr))
       return;
     URowWidget *Row = CreateWidget<URowWidget>(this, RowClass);
-    Row->ServerName->SetText(FText::FromString(CurName));
+    Row->ServerName->SetText(FText::FromString(Server.Name));
+    FString InfoString = FString::Printf(TEXT("(%s) %dms %d/%d"), *Server.HostUsername, Server.Ping, Server.CurrentPlayers, Server.MaxPlayers);
+    FText InfoText = FText::FromString(InfoString);
+    Row->PlayersText->SetText(InfoText);
     Row->Setup(this, i++);
     ServerList->AddChild(Row);
     // RowList.Add(Row);
