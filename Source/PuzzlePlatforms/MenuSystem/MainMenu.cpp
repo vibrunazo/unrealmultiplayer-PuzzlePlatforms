@@ -58,8 +58,10 @@ void UMainMenu::SetServerList(TArray<FServerData> Servers)
     if (!ensure(RowClass != nullptr))
       return;
     URowWidget *Row = CreateWidget<URowWidget>(this, RowClass);
-    Row->ServerName->SetText(FText::FromString(Server.Name));
-    FString InfoString = FString::Printf(TEXT("(%s) %dms %d/%d"), *Server.HostUsername, Server.Ping, Server.CurrentPlayers, Server.MaxPlayers);
+    FString NameString = FString::Printf(TEXT("%s (%s)"), *Server.Name.Left(12), *Server.HostUsername.Left(12));
+    FText NameText = FText::FromString(NameString);
+    Row->ServerName->SetText(NameText);
+    FString InfoString = FString::Printf(TEXT("%dms %d/%d"), Server.Ping, Server.CurrentPlayers, Server.MaxPlayers);
     FText InfoText = FText::FromString(InfoString);
     Row->PlayersText->SetText(InfoText);
     Row->Setup(this, i++);
