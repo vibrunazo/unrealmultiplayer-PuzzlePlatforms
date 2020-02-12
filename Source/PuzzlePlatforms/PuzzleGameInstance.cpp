@@ -169,9 +169,10 @@ void UPuzzleGameInstance::CreateSession()
 {
     if (!ensure(SessionInterface.IsValid())) return;
     FOnlineSessionSettings SessionSettings;
-    SessionSettings.bIsLANMatch = true;
+    SessionSettings.bIsLANMatch = false;
     SessionSettings.NumPublicConnections = 2;
     SessionSettings.bShouldAdvertise = true;
+    SessionSettings.bUsesPresence = true;
     SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
 
@@ -195,9 +196,12 @@ void UPuzzleGameInstance::OnFindSessionsComplete(bool bSuccess)
 void UPuzzleGameInstance::MenuNeedsSessions()
 {
     if (!SessionSearch.IsValid()) return;
-    SessionSearch->bIsLanQuery = true;
+    // SessionSearch->bIsLanQuery = true;
+    SessionSearch->MaxSearchResults = 200;
+    SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
     SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-    UE_LOG(LogTemp, Warning, TEXT("Started looking for sessions"));
+    UE_LOG(LogTemp, Warning, TEXT("Started looking for 200 sessions"));
+    // Log LogOnline VeryVerbose
 }
 
 void UPuzzleGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)

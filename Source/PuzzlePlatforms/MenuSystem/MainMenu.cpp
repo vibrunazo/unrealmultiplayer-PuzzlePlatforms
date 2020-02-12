@@ -12,6 +12,9 @@
 
 UMainMenu::UMainMenu(const FObjectInitializer &ObjectInitializer)
 {
+  // WidgetBlueprint'/Game/MenuSystem/WBP_Menu.WBP_Menu'
+  // WidgetBlueprint'/Game/MenuSystem/WBP_Row.WBP_Row'
+  // static ConstructorHelpers::FClassFinder<UUserWidget> RowBPClass(TEXT("/Game/MenuSystem/WBP_Row.WBP_Row"));
   static ConstructorHelpers::FClassFinder<UUserWidget> RowBPClass(TEXT("/Game/MenuSystem/WBP_Row"));
   if (!ensure(RowBPClass.Class != nullptr))
     return;
@@ -46,7 +49,10 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
 {
   if (!ensure(ServerList != nullptr)) return;
   ServerList->ClearChildren();
-  uint32 i = 0;
+  int32 i = 0;
+  ServerNames.Add("test1");
+  ServerNames.Add("test2");
+  ServerNames.Add("test3");
   for (auto &&CurName : ServerNames)
   {
     if (!ensure(RowClass != nullptr))
@@ -55,13 +61,31 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
     Row->ServerName->SetText(FText::FromString(CurName));
     Row->Setup(this, i++);
     ServerList->AddChild(Row);
+    // RowList.Add(Row);
   }
 }
 
-void UMainMenu::SelectIndex(uint32 NewIndex)
+void UMainMenu::SelectIndex(int32 NewIndex)
 {
   SelectedIndex = NewIndex;
   UE_LOG(LogTemp, Warning, TEXT("Selected index is now: %d"), SelectedIndex.GetValue());
+  UpdateChildren();
+}
+
+void UMainMenu::UpdateChildren()
+{
+  TArray<UWidget *> RowList = ServerList->GetAllChildren();
+  // Deselect all who are not current index
+  for (auto &&Child : RowList)
+  {
+    URowWidget* Row = Cast<URowWidget>(Child);
+    if (!ensure(Row != nullptr )) return;
+    if (SelectedIndex != Row->MyIndex)
+    {
+      Row->bIsSelected = false;
+      Row->DeSelect();
+    }
+  }
 }
 
 void UMainMenu::OnHostClick()

@@ -16,15 +16,20 @@ class PUZZLEPLATFORMS_API URowWidget : public UUserWidget
 
 public:
 	// called from the parent to setup both who my parent is and what my index is
-	void Setup(class UMainMenu* Parent, uint32 NewIndex);
+	void Setup(class UMainMenu* Parent, int32 NewIndex);
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeSelect();
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* ServerName;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* RowButton;
+	UPROPERTY(BlueprintReadWrite)
+	class UMainMenu* MyParent = nullptr;
+	UPROPERTY(BlueprintReadOnly)
+	int32 MyIndex = 0;
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsSelected = false;
 private:
 	UFUNCTION()
 	void OnRowClick();
-	UPROPERTY()
-	class UMainMenu* MyParent = nullptr;
-	uint32 MyIndex = 0;
 };

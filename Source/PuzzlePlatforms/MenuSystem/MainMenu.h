@@ -17,7 +17,8 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 public:
 	UMainMenu(const FObjectInitializer &ObjectInitializer);
 	void SetServerList(TArray<FString> ServerNames);
-	void SelectIndex(uint32 NewIndex);
+	void SelectIndex(int32 NewIndex);
+	void UpdateChildren();
 
 	// UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	// class UEditableTextBox* IPTextbox;
@@ -55,5 +56,6 @@ private:
 
 	TSubclassOf<class UUserWidget> RowClass;
 	TOptional<uint32> SelectedIndex;
+	// TArray<class URowWidget*> RowList;
 
 };
