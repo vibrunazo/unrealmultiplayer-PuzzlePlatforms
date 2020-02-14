@@ -29,8 +29,10 @@ public:
 	void LoadMenu();
 	UFUNCTION(Exec, BlueprintCallable)
 	void LoadInGameMenu();
+	// UFUNCTION(Exec)
+	// void Host() override;
 	UFUNCTION(Exec)
-	void Host() override;
+	void Host(FString NewServerName) override;
 	// void Join() override;
 	// UFUNCTION(Exec)
 	// void Join(const FString& Address) override;
@@ -54,4 +56,5 @@ private:
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	// whether we need a new session to be created after one is destroyed
 	bool bNeedsNewSession = false;
+	FString CustomServerName = "New Server";
 };

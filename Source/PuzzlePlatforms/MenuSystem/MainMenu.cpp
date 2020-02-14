@@ -38,6 +38,12 @@ bool UMainMenu::Initialize()
   if (!ensure(JoinCancelButton != nullptr))
     return false;
   JoinCancelButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinCancelClick);
+  if (!ensure(JoinCancelButton != nullptr))
+    return false;
+  HostCancelButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostCancelClick);
+  if (!ensure(JoinCancelButton != nullptr))
+    return false;
+  HostConfirmButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostConfirmClick);
   if (!ensure(QuitButton != nullptr))
     return false;
   QuitButton->OnClicked.AddDynamic(this, &UMainMenu::OnQuitClick);
@@ -96,9 +102,11 @@ void UMainMenu::UpdateChildren()
 void UMainMenu::OnHostClick()
 {
   UE_LOG(LogTemp, Warning, TEXT("Host Button clicked"));
-  if (!ensure(MenuInterface != nullptr))
-    return;
-  MenuInterface->Host();
+  if (!ensure(MenuSwitcher != nullptr)) return;
+  MenuSwitcher->SetActiveWidget(HostWindow);
+  // if (!ensure(MenuInterface != nullptr))
+  //   return;
+  // MenuInterface->Host();
 }
 
 void UMainMenu::OnJoinClick()
@@ -138,6 +146,24 @@ void UMainMenu::OnJoinCancelClick()
   if (!ensure(MenuSwitcher != nullptr))
     return;
   MenuSwitcher->SetActiveWidget(MenuWindow);
+}
+
+void UMainMenu::OnHostCancelClick()
+{
+  UE_LOG(LogTemp, Warning, TEXT("Host Cancel Button clicked"));
+  if (!ensure(MenuSwitcher != nullptr))
+    return;
+  MenuSwitcher->SetActiveWidget(MenuWindow);
+}
+
+void UMainMenu::OnHostConfirmClick()
+{
+  UE_LOG(LogTemp, Warning, TEXT("Host Confirm Button clicked"));
+  if (!ensure(HostTextBox != nullptr)) return;
+  FText NameText = HostTextBox->GetText();
+  if (!ensure(MenuInterface != nullptr))
+    return;
+  MenuInterface->Host(NameText.ToString());
 }
 
 void UMainMenu::OnQuitClick()

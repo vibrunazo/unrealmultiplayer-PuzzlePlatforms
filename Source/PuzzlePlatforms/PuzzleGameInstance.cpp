@@ -71,10 +71,16 @@ void UPuzzleGameInstance::LoadInGameMenu()
     InGameMenu->SetMenuInterface(this);
 }
 
-void UPuzzleGameInstance::Host()
+// void UPuzzleGameInstance::Host(FString NewServerName)
+// {
+//     CustomServerName = NewServerName;
+//     Host();
+// }
+void UPuzzleGameInstance::Host(FString NewServerName)
 {
     if (SessionInterface.IsValid())
     {
+        CustomServerName = NewServerName;
         auto ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
         if (ExistingSession != nullptr)
         {
@@ -174,6 +180,7 @@ void UPuzzleGameInstance::CreateSession()
     SessionSettings.NumPublicConnections = 4;
     SessionSettings.bShouldAdvertise = true;
     SessionSettings.bUsesPresence = true;
+    SessionSettings.Set(TEXT("ServerName"), CustomServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
     SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
 
@@ -189,6 +196,7 @@ void UPuzzleGameInstance::OnFindSessionsComplete(bool bSuccess)
         FString SessId = Result.GetSessionIdStr();
         int32 SessPing = Result.PingInMs;
         UE_LOG(LogTemp, Warning, TEXT("Session: %s, ping: %d"), *SessId, SessPing);
+        Result.Session.SessionSettings.Get(TEXT("ServerName"), SessId);
         FServerData Data;
         Data.Name = SessId;
         Data.HostUsername = Result.Session.OwningUserName;

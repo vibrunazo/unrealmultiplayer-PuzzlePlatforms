@@ -41,6 +41,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UWidget* JoinWindow;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidget* HostWindow;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UWidgetSwitcher* MenuSwitcher;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* HostButton;
@@ -50,6 +52,12 @@ public:
 	class UButton* JoinConfirmButton;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* JoinCancelButton;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* HostConfirmButton;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UEditableTextBox* HostTextBox;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* HostCancelButton;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* QuitButton;
 	
@@ -63,6 +71,10 @@ private:
 	void OnJoinConfirmClick();
 	UFUNCTION()
 	void OnJoinCancelClick();
+	UFUNCTION()
+	void OnHostConfirmClick();
+	UFUNCTION()
+	void OnHostCancelClick();
 	UFUNCTION()
 	void OnQuitClick();
 
