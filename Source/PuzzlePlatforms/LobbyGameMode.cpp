@@ -36,6 +36,7 @@ void ALobbyGameMode::Logout(AController* Exiting)
     UE_LOG(LogTemp, Warning, TEXT("A Player Left! Total players: %d"), CountPlayers);
 }
 
+// TODO transition map UI needs to be in game state so I can remove it here
 void ALobbyGameMode::OnTimerEnd()
 {
     UE_LOG(LogTemp, Warning, TEXT("TIMER END"));
