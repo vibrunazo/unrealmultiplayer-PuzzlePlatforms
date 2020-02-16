@@ -39,6 +39,7 @@ public:
 	UFUNCTION(Exec)
 	void Join(uint32 Index) override;
 	void MenuNeedsSessions() override;
+	void StartSession();
 
 
 private:

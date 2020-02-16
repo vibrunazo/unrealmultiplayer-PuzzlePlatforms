@@ -236,3 +236,9 @@ void UPuzzleGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessio
     UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionCompleted! Info: %s"), *ConnectInfo);
     PlayerController->ClientTravel(ConnectInfo, ETravelType::TRAVEL_Absolute);
 }
+
+void UPuzzleGameInstance::StartSession()
+{
+    if (!ensure(SessionInterface != nullptr)) return;
+    SessionInterface->StartSession(SESSION_NAME);
+}

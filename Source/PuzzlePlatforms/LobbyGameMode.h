@@ -19,5 +19,10 @@ public:
 	void Logout(AController* Exiting) override;
 
 	uint16 CountPlayers = 0;
+
+private:
+	struct FTimerHandle TimerHandle;
+	void OnTimerEnd();
+	bool bTimerExpired = true;
 	
 };
