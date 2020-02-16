@@ -158,7 +158,6 @@ void UPuzzleGameInstance::OnCreateSessionComplete(FName SessionName, bool Succes
     {
         Menu->Teardown();
     }
-
     UWorld* World = GetWorld();
     if (!ensure(World != nullptr)) return;
     World->ServerTravel("/Game/Maps/LobbyMap?listen");
